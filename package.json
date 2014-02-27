@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "request": "~2.34.0",
-    "mktemp": "~0.3.4",
     "roaster": "~1.0.1",
     "open": "0.0.4"
   }
