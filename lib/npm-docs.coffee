@@ -35,7 +35,8 @@ module.exports =
             previousActivePane.activate()
 
   getSelection: ->
-    atom.workspace.getActiveEditor().getSelection().getText()
+    editor = atom.workspace.getActiveEditor()
+    editor.getSelection().getText() || editor.getWordUnderCursor()
 
   search: (cb) ->
     selection = @getSelection()
