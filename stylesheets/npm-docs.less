@@ -1,3 +1,6 @@
+// most of this is from
+//   https://github.com/atom/markdown-preview/blob/687b4d613f90be1cf91666264b3efda1b2df1bb6/stylesheets/markdown-preview.less
+
 @font-family: "Helvetica Neue", Helvetica, sans-serif;
 .npm-docs {
   font-family: @font-family;
@@ -13,26 +16,12 @@
   }
 }
 
-.markdown-spinner {
-  margin: auto;
-  background-image: url(images/octocat-spinner-128.gif);
-  background-repeat: no-repeat;
-  background-size: 64px;
-  background-position: top center;
-  padding-top: 70px;
-  text-align: center;
-}
-
-// This is styling for generic markdownized text. Anything you put in a
-// container with .npm-docs on it should render generally well. It also
-// includes some GitHub Flavored Markdown specific styling (like @mentions)
 .npm-docs {
   pre,
-  pre div.editor,
   code,
   tt {
     font-size: 12px;
-    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    font-family: "Inconsolata", Consolas, Courier, monospace;
   }
 
   a {
