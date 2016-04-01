@@ -8,39 +8,42 @@ module.exports =
   npmDocsView: null
 
   activate: (state) ->
-    atom.workspace.registerOpener (uriToOpen) ->
+    atom.workspace.addOpener (uriToOpen) ->
       {protocol, host} = url.parse(uriToOpen)
       return unless protocol is 'npm-docs:'
       new NpmDocsView(host)
 
-    atom.workspaceView.command "npm-docs:open", =>
-      open("https://npmjs.org/package/#{@getSelection()}")
+    atom.commands.add 'atom-workspace',
+      "npm-docs:open": =>
+        selection = @getSelection()
+        if(selection.trim() == '') then return
+        open("https://npmjs.org/package/#{selection}")
 
-    atom.workspaceView.command "npm-docs:homepage", =>
-      @search (err, json, selection) ->
-        if (err) then throw err
-        open(json.homepage)
-
-    atom.workspaceView.command "npm-docs:readme", =>
-      @search (err, json, selection) ->
-        if (err) then throw err
-        markdown = json.readme
-        if !markdown then return
-        roaster markdown, {}, (err, contents) ->
+      "npm-docs:homepage": =>
+        @search (err, json, selection) ->
           if (err) then throw err
-          uri = "npm-docs://#{selection}"
-          previousActivePane = atom.workspace.getActivePane()
-          atom.workspace.open(uri, split: 'right', searchAllPanes: true).done (npmDocsView) ->
-            npmDocsView.renderContents(contents)
-            previousActivePane.activate()
+          open(json.homepage)
+
+      "npm-docs:readme": =>
+        @search (err, json, selection) ->
+          if (err) then throw err
+          markdown = json.readme
+          if !markdown then return
+          roaster markdown, {}, (err, contents) ->
+            if (err) then throw err
+            uri = "npm-docs://#{selection}"
+            previousActivePane = atom.workspace.getActivePane()
+            atom.workspace.open(uri, split: 'right', searchAllPanes: true).done (npmDocsView) ->
+              npmDocsView.renderContents(contents)
+              previousActivePane.activate()
 
   getSelection: ->
-    editor = atom.workspace.getActiveEditor()
-    editor.getSelection().getText() || editor.getWordUnderCursor()
+    editor = atom.workspace.getActiveTextEditor()
+    editor.getSelectedText() || editor.getWordUnderCursor()
 
   search: (cb) ->
     selection = @getSelection()
-
+    if(selection.trim() == '') then return
     request.get "https://registry.npmjs.org/#{selection}", (err, res) ->
       if (err) then throw err
 
