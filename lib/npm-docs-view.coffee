@@ -1,4 +1,4 @@
-{ScrollView} = require 'atom'
+{ScrollView} = require 'atom-space-pen-views'
 
 module.exports =
 class NpmDocsView extends ScrollView
@@ -22,12 +22,13 @@ class NpmDocsView extends ScrollView
     path: @path
 
   handleEvents: ->
-    @subscribe this, 'core:move-up',   => @scrollUp()
-    @subscribe this, 'core:move-down', => @scrollDown()
+    @on 'core:move-up',  this,   => @scrollUp()
+    @on 'core:move-down',this,  => @scrollDown()
 
   # Tear down any state and detach
   destroy: ->
-    @unsubscribe()
+    @off('core:move-up',this)
+    @off('core:move-down',this)
 
   getTitle: ->
     "npm-docs: #{@path}"

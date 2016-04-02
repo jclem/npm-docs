@@ -1,4 +1,5 @@
 NpmDocs = require '../lib/npm-docs'
+{$} = require 'atom-space-pen-views'
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
@@ -6,24 +7,26 @@ NpmDocs = require '../lib/npm-docs'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "NpmDocs", ->
-  activationPromise = null
+  loadpackage = null
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    activationPromise = atom.packages.activatePackage('npmDocs')
-
+    atom.workspaceView = atom.views.getView(atom.workspace)
+    loadpackage = atom.packages.enablePackage("npm-docs")
+    console.log loadpackage
   describe "when the npm-docs:search event is triggered", ->
     it "attaches and then detaches the view", ->
-      expect(atom.workspaceView.find('.npm-docs')).not.toExist()
+      expect($(atom.workspaceView).find('.npm-docs')).not.toExist()
 
       # This is an activation event, triggering it will cause the package to be
       # activated.
-      atom.workspaceView.trigger 'npm-docs:toggle'
+      atom.commands.dispatch atom.workspaceView, 'npm-docs:toggle'
 
-      waitsForPromise ->
-        activationPromise
+      #waitsForPromise ->
+        #loadpackage.activationPromise
 
       runs ->
-        expect(atom.workspaceView.find('.npm-docs')).toExist()
-        atom.workspaceView.trigger 'npm-docs:search'
-        expect(atom.workspaceView.find('.npm-docs')).not.toExist()
+        console.log loadpackage
+        #console.log $(atom.workspaceView).find('.npm-docs')
+        expect($(atom.workspaceView).find('.npm-docs')).toExist()
+        atom.commands.dispatch atom.workspaceView, 'npm-docs:search'
+        expect($(atom.workspaceView).find('.npm-docs')).not.toExist()
