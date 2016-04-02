@@ -28,7 +28,7 @@ class NpmDocsView extends ScrollView
   # Tear down any state and detach
   destroy: ->
     @off('core:move-up',this)
-    @off('core:move-up',this)
+    @off('core:move-down',this)
 
   getTitle: ->
     "npm-docs: #{@path}"
