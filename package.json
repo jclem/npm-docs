@@ -1,7 +1,7 @@
 {
   "name": "npm-docs",
   "main": "./lib/npm-docs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Helpful information for node modules for the Atom text editor",
   "activationEvents": [
